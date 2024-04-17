@@ -1,4 +1,4 @@
-import { FC, ReactNode, createContext, useState } from 'react';
+import { FC, ReactNode, createContext, useState, useCallback, useEffect } from 'react';
 import Hls from 'hls.js';
 
 type HlsContextContainerProps = {
@@ -11,7 +11,7 @@ type HlsContextProps = {
   updateAttachedVideoElement: (attachedVideoElement?: HTMLVideoElement) => void;
 };
 
-const HlsContext = createContext<HlsContextProps>({
+export const HlsContext = createContext<HlsContextProps>({
   isSupported: false,
   attachedVideoElement: null,
   updateAttachedVideoElement: () => null,
@@ -19,10 +19,29 @@ const HlsContext = createContext<HlsContextProps>({
 
 const HlsContextContainer: FC<HlsContextContainerProps> = ({ children }) => {
   const [attachedVideoElement, setAttachedVideoElement] = useState<HTMLVideoElement | null>(null);
+  const [hls, setHls] = useState<Hls | null>(null);
 
-  const handleUpdateAttachedVideoElement = (videoElement: HTMLVideoElement | null = null) => {
-    setAttachedVideoElement(videoElement);
-  };
+  useEffect(() => {
+    let hls = null;
+
+    if (attachedVideoElement) {
+      hls = new Hls();
+
+      hls.attachMedia(attachedVideoElement);
+      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+        console.log('attached hls and video');
+      });
+    }
+
+    setHls(hls);
+  }, [attachedVideoElement]);
+
+  const handleUpdateAttachedVideoElement = useCallback(
+    (videoElement: HTMLVideoElement | null = null) => {
+      setAttachedVideoElement(videoElement);
+    },
+    [setAttachedVideoElement]
+  );
 
   if (!Hls.isSupported()) {
     return <div>Error! Media Source Extensions is not available.</div>;
