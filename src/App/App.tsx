@@ -1,14 +1,8 @@
 import './App.css';
+import MainContent from './MainContent.tsx';
 
 function App() {
-  return (
-    <div>
-      <h1>HLS.JS POC</h1>
-      <div className="card">
-        <p>Ready for your coding!</p>
-      </div>
-    </div>
-  );
+  return <MainContent />;
 }
 
 export default App;
