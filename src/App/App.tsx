@@ -1,12 +1,12 @@
 import './App.css';
 import MainContent from './MainContent.tsx';
-import HlsContainer from '../components/HlsContainer/HlsContainer.tsx';
+import HlsContext from '../contexts/HlsContext';
 
 function App() {
   return (
-    <HlsContainer>
+    <HlsContext>
       <MainContent />
-    </HlsContainer>
+    </HlsContext>
   );
 }
 
