@@ -1,14 +1,7 @@
 import { render } from '@testing-library/react';
-import { describe, expect, it, vi, Mock } from 'vitest';
+import { describe, expect, it, Mock } from 'vitest';
 import Hls from 'hls.js';
 import HlsContainer from '../HlsContainer.tsx';
-
-vi.mock('hls.js', () => ({
-  default: {
-    ...vi.importActual('hls.js'),
-    isSupported: vi.fn(),
-  },
-}));
 
 const content = 'content';
 
@@ -18,7 +11,7 @@ describe('HlsContainer', () => {
 
     const { queryByText } = render(<HlsContainer>{content}</HlsContainer>);
 
-    expect(queryByText(content)).not.toBeTruthy();
+    expect(queryByText(content)).not.toBeInTheDocument();
   });
 
   it('renders expected content MediaSource Extensions are available', () => {
@@ -26,6 +19,6 @@ describe('HlsContainer', () => {
 
     const { queryByText } = render(<HlsContainer>{content}</HlsContainer>);
 
-    expect(queryByText(content)).toBeTruthy();
+    expect(queryByText(content)).toBeInTheDocument();
   });
 });
