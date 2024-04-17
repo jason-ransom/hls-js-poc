@@ -19,7 +19,11 @@ export const HlsContext = createContext<HlsContextProps>({
 
 const HlsContextContainer: FC<HlsContextContainerProps> = ({ children }) => {
   const [attachedVideoElement, setAttachedVideoElement] = useState<HTMLVideoElement | null>(null);
-  const [hls, setHls] = useState<Hls | null>(null);
+  const [
+    ,
+    // hls,
+    setHls,
+  ] = useState<Hls | null>(null);
 
   useEffect(() => {
     let hls = null;
