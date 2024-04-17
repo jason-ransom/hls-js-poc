@@ -3,6 +3,10 @@
 This is a POC to get accustomed to using the [hls.js library](https://github.com/video-dev/hls.js). There is no
 particular goal. Have fun! 😊🎥🌐🚀
 
+# Environment
+
+Currently using node 21.x (which is also used in the github actions).
+
 ## Created Using React + TypeScript + Vite Template
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
