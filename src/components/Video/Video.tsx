@@ -3,9 +3,7 @@ import { HlsContext } from '../../contexts/HlsContext';
 import { ButtonRow, VideoContainer } from './videoStyles.ts';
 import { createPlayHandler } from './videoUtil.ts';
 
-interface VideoProps {}
-
-const Video: FC<VideoProps> = () => {
+const Video: FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { updateAttachedVideoElement, loadSource } = useContext(HlsContext);
   const [sourceLoaded, setSourceLoaded] = useState<boolean>(false);
