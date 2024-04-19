@@ -1,12 +1,15 @@
-import { FC, useContext, useEffect, useRef } from 'react';
+import { FC, useContext, useEffect, useRef, useState } from 'react';
 import { HlsContext } from '../../contexts/HlsContext';
-import { BIG_BUCK_BUNNY } from '../../constants';
+import { ButtonRow, VideoContainer } from './videoStyles.ts';
+import { createPlayHandler } from './videoUtil.ts';
 
 interface VideoProps {}
 
 const Video: FC<VideoProps> = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const { updateAttachedVideoElement, loadSource } = useContext(HlsContext);
+  const [sourceLoaded, setSourceLoaded] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -14,21 +17,22 @@ const Video: FC<VideoProps> = () => {
     }
   }, [updateAttachedVideoElement]);
 
-  const handlePlay = () => {
-    if (!videoRef.current) {
-      console.log('video playing not ready yet.');
-      return;
-    }
-
-    loadSource(BIG_BUCK_BUNNY);
-    videoRef.current.play();
-  };
+  const handlePlay = createPlayHandler({
+    videoRef,
+    sourceLoaded,
+    loadSource,
+    setSourceLoaded,
+    isPlaying,
+    setIsPlaying,
+  });
 
   return (
-    <div>
+    <VideoContainer>
       <video ref={videoRef}></video>
-      <button onClick={handlePlay}>Play</button>
-    </div>
+      <ButtonRow>
+        <button onClick={handlePlay}>{isPlaying ? 'Pause' : 'Play'}</button>
+      </ButtonRow>
+    </VideoContainer>
   );
 };
 
