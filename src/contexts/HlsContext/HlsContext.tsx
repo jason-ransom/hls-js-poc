@@ -10,21 +10,19 @@ type HlsContextProps = {
   isSupported: boolean;
   attachedVideoElement: HTMLVideoElement | null;
   updateAttachedVideoElement: (attachedVideoElement?: HTMLVideoElement) => void;
+  loadSource: (url: string) => void;
 };
 
 export const HlsContext = createContext<HlsContextProps>({
   isSupported: false,
   attachedVideoElement: null,
   updateAttachedVideoElement: () => null,
+  loadSource: () => null,
 });
 
 const HlsContextContainer: FC<HlsContextContainerProps> = ({ children }) => {
   const [attachedVideoElement, setAttachedVideoElement] = useState<HTMLVideoElement | null>(null);
-  const [
-    ,
-    // hls,
-    setHls,
-  ] = useState<Hls | null>(null);
+  const [hls, setHls] = useState<Hls | null>(null);
 
   useEffect(() => {
     initAndSetHls(attachedVideoElement, setHls);
@@ -37,6 +35,16 @@ const HlsContextContainer: FC<HlsContextContainerProps> = ({ children }) => {
     [setAttachedVideoElement]
   );
 
+  const handleLoadSource = useCallback(
+    (url: string) => {
+      if (hls && attachedVideoElement) {
+        hls.loadSource(url);
+        hls.attachMedia(attachedVideoElement);
+      }
+    },
+    [hls, attachedVideoElement]
+  );
+
   if (!Hls.isSupported()) {
     return <div>Error! Media Source Extensions is not available.</div>;
   }
@@ -47,6 +55,7 @@ const HlsContextContainer: FC<HlsContextContainerProps> = ({ children }) => {
         isSupported: Hls.isSupported(),
         attachedVideoElement,
         updateAttachedVideoElement: handleUpdateAttachedVideoElement,
+        loadSource: handleLoadSource,
       }}
     >
       {children}
