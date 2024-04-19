@@ -1,5 +1,6 @@
 import { FC, ReactNode, createContext, useState, useCallback, useEffect } from 'react';
 import Hls from 'hls.js';
+import { initAndSetHls } from './hlsContextUtil.ts';
 
 type HlsContextContainerProps = {
   children: ReactNode;
@@ -26,18 +27,7 @@ const HlsContextContainer: FC<HlsContextContainerProps> = ({ children }) => {
   ] = useState<Hls | null>(null);
 
   useEffect(() => {
-    let hls = null;
-
-    if (attachedVideoElement) {
-      hls = new Hls();
-
-      hls.attachMedia(attachedVideoElement);
-      hls.on(Hls.Events.MEDIA_ATTACHED, () => {
-        console.log('attached hls and video');
-      });
-    }
-
-    setHls(hls);
+    initAndSetHls(attachedVideoElement, setHls);
   }, [attachedVideoElement]);
 
   const handleUpdateAttachedVideoElement = useCallback(
